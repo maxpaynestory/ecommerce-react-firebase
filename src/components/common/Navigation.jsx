@@ -54,9 +54,10 @@ const Navigation = () => {
     ROUTE.FORGOT_PASSWORD
   ];
 
-  if (store.user && store.user.role === 'ADMIN') {
+  /*if (store.user && store.user.role === 'ADMIN') {
     return null;
   } if (window.screen.width <= 800) {
+    console.log("hein");
     return (
       <MobileNavigation
         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -65,7 +66,7 @@ const Navigation = () => {
         pathname={pathname}
       />
     );
-  }
+  }*/
   return (
     <nav className="navigation" ref={navbar}>
       <div className="logo">

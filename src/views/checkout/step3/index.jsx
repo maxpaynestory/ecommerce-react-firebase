@@ -11,6 +11,7 @@ import withCheckout from '../hoc/withCheckout';
 import CreditPayment from './CreditPayment';
 import PayPalPayment from './PayPalPayment';
 import Total from './Total';
+import CashOnDelivery from './CashOnDelivery';
 
 const FormSchema = Yup.object().shape({
   name: Yup.string()
@@ -38,7 +39,7 @@ const Payment = ({ shipping, payment, subtotal }) => {
     cardnumber: payment.cardnumber || '',
     expiry: payment.expiry || '',
     ccv: payment.ccv || '',
-    type: payment.type || 'paypal'
+    type: payment.type || 'cod'
   };
 
   const onConfirm = () => {
@@ -64,8 +65,12 @@ const Payment = ({ shipping, payment, subtotal }) => {
       >
         {() => (
           <Form className="checkout-step-3">
-            <CreditPayment />
-            <PayPalPayment />
+            <h3 className="text-center">Payment</h3>
+            <br />
+            <span className="d-block padding-s">Payment Option</span>
+            <CashOnDelivery />
+            {/*}<CreditPayment />
+            <PayPalPayment />{*/}
             <Total
               isInternational={shipping.isInternational}
               subtotal={subtotal}
