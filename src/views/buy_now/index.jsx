@@ -1,16 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useDocumentTitle, useProduct, useBasket } from "@/hooks";
-import { useParams } from "react-router-dom";
+import { useDocumentTitle, useProduct } from "@/hooks";
 import { ArrowRightOutlined, LoadingOutlined } from "@ant-design/icons";
 import { ImageLoader } from "@/components/common";
 import { displayMoney } from "@/helpers/utils";
 import ShippingForm from "../checkout/step2/ShippingForm";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { setShippingDetails } from "@/redux/actions/checkoutActions";
+import { buyNowProduct } from "@/redux/actions/productActions";
 import { CHECKOUT_STEP_3 } from "@/constants/routes";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import CashOnDelivery from "@/views/checkout/step3/CashOnDelivery";
 
 const BuyNow = () => {
@@ -19,7 +18,6 @@ const BuyNow = () => {
   const [shippingCost, setShippingCost] = useState(200);
   const dispatch = useDispatch();
   const history = useHistory();
-  const { addToBasket, isItemOnBasket } = useBasket(id);
 
   const initFormikValues = {
     fullname: "",
@@ -44,12 +42,6 @@ const BuyNow = () => {
   if (product) {
     total = product.price * product.quantity + shippingCost;
   }
-
-  useEffect(() => {
-    if (product) {
-      isItemOnBasket(product.id) || addToBasket(product.id);
-    }
-  }, [product]);
 
   useDocumentTitle("Buy Now | Sabiyya Collections");
 
@@ -81,21 +73,37 @@ const BuyNow = () => {
 
   const onSubmitForm = useCallback(
     (form) => {
+      const orderNumber = window.performance.now().toString().replace(".", "");
       dispatch(
-        setShippingDetails({
-          fullname: form.fullname,
-          email: form.email,
-          address: form.address,
-          mobile: form.mobile,
-          isInternational: false,
-          isDone: true,
-          city: form.city,
-          type: form.type,
-        })
+        buyNowProduct(
+          product,
+          {
+            fullname: form.fullname,
+            email: form.email,
+            address: form.address,
+            mobile: form.mobile,
+            isInternational: false,
+            isDone: true,
+            city: form.city,
+            type: form.type,
+          },
+          orderNumber,
+          total,
+          shippingCost
+        )
       );
-      ///history.push(CHECKOUT_STEP_3);
+      history.push("/order/" + orderNumber);
     },
-    [CHECKOUT_STEP_3, dispatch, setShippingDetails, history]
+    [
+      CHECKOUT_STEP_3,
+      dispatch,
+      buyNowProduct,
+      history,
+      product,
+      window,
+      total,
+      shippingCost,
+    ]
   );
 
   return (
@@ -132,7 +140,7 @@ const BuyNow = () => {
               </div>
             </div>
             <div className="basket-item">
-              <div className="basket-item-details">Shipping</div>
+              <div className="basket-item-details">Delivery Fee</div>
               <div className="basket-item-price text-right">
                 <h4 className="my-0">{displayMoney(shippingCost)}</h4>
               </div>

@@ -4,7 +4,8 @@ import {
   EDIT_PRODUCT,
   GET_PRODUCTS,
   REMOVE_PRODUCT,
-  SEARCH_PRODUCT
+  SEARCH_PRODUCT,
+  BUY_NOW_PRODUCT,
 } from '@/constants/constants';
 import { ADMIN_PRODUCTS } from '@/constants/routes';
 import { displayActionMessage } from '@/helpers/utils';
@@ -18,7 +19,8 @@ import {
   addProductSuccess,
   clearSearchState, editProductSuccess, getProductsSuccess,
   removeProductSuccess,
-  searchProductSuccess
+  searchProductSuccess,
+  buyNowProductComplete
 } from '../actions/productActions';
 
 function* initRequest() {
@@ -39,6 +41,21 @@ function* handleAction(location, message, status) {
 
 function* productSaga({ type, payload }) {
   switch (type) {
+    case BUY_NOW_PRODUCT:
+        try {
+          yield initRequest();
+          const results = yield call(firebase.buynowProduct, payload.product, payload.guestUserInfo, payload.orderNumber, payload.total, payload.shippingCost);
+          console.log("Order created", results);
+          yield put(buyNowProductComplete({
+            orderNumber: payload.orderNumber
+          }));
+          yield put(setRequestStatus(''));
+          yield put(setLoading(false));
+        } catch (e) {
+          console.log(e);
+          yield handleError(e);
+        }
+      break;
     case GET_PRODUCTS:
       try {
         yield initRequest();

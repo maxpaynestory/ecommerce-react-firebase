@@ -18,4 +18,5 @@ export { default as Search } from './search';
 export { default as Shop } from './shop';
 export { default as ViewProduct } from './view_product';
 export { default as BuyNow } from './buy_now';
+export {default as OrderCompleted} from './order_completed';
 

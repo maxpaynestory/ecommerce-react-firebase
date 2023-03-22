@@ -262,6 +262,24 @@ class Firebase {
     this.db.collection("products").doc(id).update(updates);
 
   removeProduct = (id) => this.db.collection("products").doc(id).delete();
+
+  buynowProduct = (product, guestUserInfo, orderNumber, total, shippingCost) => {
+    return new Promise( async (resolve, reject) => {
+      console.log("Going to create order", product, guestUserInfo, orderNumber);
+      const orderId = this.db.collection("orders").doc().id;
+      const results = await this.db.collection('orders').doc(orderId).set({
+        product: product,
+        guestUserInfo: guestUserInfo,
+        orderNumber: orderNumber,
+        createdAt: new Date(),
+        total: total,
+        shippingCost: shippingCost,
+      });
+      resolve(results);
+    });
+  };
+
+  getOrder = (orderNumber) => this.db.collection("orders").where('orderNumber', '==', orderNumber).limit(1).get();
 }
 
 const firebaseInstance = new Firebase();

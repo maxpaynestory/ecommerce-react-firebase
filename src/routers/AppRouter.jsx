@@ -40,6 +40,7 @@ const AppRouter = () => (
         />
         <Route component={view.ViewProduct} path={ROUTES.VIEW_PRODUCT} />
         <Route component={view.BuyNow} path={ROUTES.BUY_NOW} />
+        <Route component={view.OrderCompleted} path={ROUTES.ORDER_COMPLETED} />
         <ClientRoute component={view.UserAccount} exact path={ROUTES.ACCOUNT} />
         <ClientRoute
           component={view.EditAccount}

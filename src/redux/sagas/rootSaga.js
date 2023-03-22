@@ -23,7 +23,8 @@ function* rootSaga() {
     ACTION.SEARCH_PRODUCT,
     ACTION.REMOVE_PRODUCT,
     ACTION.EDIT_PRODUCT,
-    ACTION.GET_PRODUCTS
+    ACTION.GET_PRODUCTS,
+    ACTION.BUY_NOW_PRODUCT,
   ], productSaga);
   yield takeLatest([
     ACTION.UPDATE_EMAIL,

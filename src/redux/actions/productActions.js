@@ -10,8 +10,20 @@ import {
   REMOVE_PRODUCT,
   REMOVE_PRODUCT_SUCCESS,
   SEARCH_PRODUCT,
-  SEARCH_PRODUCT_SUCCESS
+  SEARCH_PRODUCT_SUCCESS,
+  BUY_NOW_PRODUCT,
+  BUY_NOW_PRODUCT_COMPLETE,
 } from '@/constants/constants';
+
+export const buyNowProductComplete = payload => ({
+  type: BUY_NOW_PRODUCT_COMPLETE,
+  payload: payload
+});
+
+export const buyNowProduct = (product, guestUserInfo, orderNumber, total, shippingCost) => ({
+  type: BUY_NOW_PRODUCT,
+  payload: {product: product, guestUserInfo: guestUserInfo, orderNumber: orderNumber, total: total, shippingCost: shippingCost}
+});
 
 export const getProducts = (lastRef) => ({
   type: GET_PRODUCTS,
