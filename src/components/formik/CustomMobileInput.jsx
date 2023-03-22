@@ -1,8 +1,8 @@
 /* eslint-disable react/forbid-prop-types */
-import { useField } from 'formik';
-import PropType from 'prop-types';
-import React from 'react';
-import PhoneInput from 'react-phone-input-2';
+import { useField } from "formik";
+import PropType from "prop-types";
+import React from "react";
+import PhoneInput from "react-phone-input-2";
 
 const CustomMobileInput = (props) => {
   const [field, meta, helpers] = useField(props);
@@ -15,7 +15,7 @@ const CustomMobileInput = (props) => {
       dialCode: data.dialCode,
       countryCode: data.countryCode,
       country: data.name,
-      value
+      value,
     };
 
     setValue(mob);
@@ -24,16 +24,20 @@ const CustomMobileInput = (props) => {
   return (
     <div className="input-group">
       {touched && error ? (
-        <span className="label-input label-error">{error?.value || error?.dialCode}</span>
+        <span className="label-input label-error">
+          {error?.value || error?.dialCode}
+        </span>
       ) : (
-        <label className="label-input" htmlFor={field.name}>{label}</label>
+        <label className="label-input" htmlFor={field.name}>
+          * {label}
+        </label>
       )}
       <PhoneInput
         name={field.name}
-        country="ph"
+        country={import.meta.env.VITE_COUNTRY}
         inputClass="input-form d-block"
         style={{
-          border: touched && error ? '1px solid red' : '1px solid #cacaca'
+          border: touched && error ? "1px solid red" : "1px solid #cacaca",
         }}
         inputExtraProps={{ required: true }}
         onChange={handleChange}
@@ -45,14 +49,14 @@ const CustomMobileInput = (props) => {
 };
 
 CustomMobileInput.defaultProps = {
-  label: 'Mobile Number',
-  placeholder: '09254461351'
+  label: "Mobile Number",
+  placeholder: "09254461351",
 };
 
 CustomMobileInput.propTypes = {
   label: PropType.string,
   placeholder: PropType.string,
-  defaultValue: PropType.object.isRequired
+  defaultValue: PropType.object.isRequired,
 };
 
 export default CustomMobileInput;
