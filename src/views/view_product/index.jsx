@@ -19,8 +19,6 @@ const ViewProduct = () => {
   const { product, isLoading, error } = useProduct(id);
   const { addToBasket, isItemOnBasket } = useBasket(id);
   useScrollTop();
-  useDocumentTitle(`View ${product?.name || "Item"}`);
-
   const [selectedImage, setSelectedImage] = useState(product?.image || "");
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
@@ -56,6 +54,8 @@ const ViewProduct = () => {
       selectedSize: selectedSize || product.sizes[0],
     });
   };
+
+  useDocumentTitle(`View ${product?.name || "Item"}`);
 
   return (
     <main className="content">

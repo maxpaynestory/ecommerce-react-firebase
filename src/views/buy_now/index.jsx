@@ -23,27 +23,25 @@ const BuyNow = () => {
     fullname: "",
     email: "",
     address: "",
-    mobile: {},
+    mobile: "",
     isInternational: false,
     isDone: false,
     city: { label: "Lahore", value: "Lahore" },
     type: "cod",
   };
 
-  const onChangeCity = useCallback((s) => {
+  const onChangeCity = (s) => {
     if (s.value === "Lahore") {
       setShippingCost(200);
     } else {
       setShippingCost(250);
     }
-  });
+  };
 
   let total = 0;
   if (product) {
     total = product.price * product.quantity + shippingCost;
   }
-
-  useDocumentTitle("Buy Now | Sabiyya Collections");
 
   const FormSchema = Yup.object().shape({
     fullname: Yup.string()
@@ -54,16 +52,9 @@ const BuyNow = () => {
       .email("Email is not valid.")
       .required("Email is required."),
     address: Yup.string().required("Your Full address is required."),
-    mobile: Yup.object()
-      .shape({
-        country: Yup.string(),
-        countryCode: Yup.string(),
-        dialCode: Yup.string().required("Mobile number is required"),
-        value: Yup.string().required(
-          "Mobile number is required. example +923001234567"
-        ),
-      })
-      .required("Mobile number is required. example +923007687676"),
+    mobile: Yup.string().required(
+      "Mobile number is required. example 031001234567"
+    ),
     isInternational: Yup.boolean(),
     isDone: Yup.boolean(),
     city: Yup.object().shape({
@@ -106,6 +97,8 @@ const BuyNow = () => {
     ]
   );
 
+  useDocumentTitle("Buy Now | Sabiyya Collections");
+
   return (
     <main className="content">
       {isLoading && (
@@ -115,7 +108,7 @@ const BuyNow = () => {
           <LoadingOutlined style={{ fontSize: "3rem" }} />
         </div>
       )}
-      {product && !isLoading && (
+      {!isLoading && (
         <div className="checkout">
           <div className="checkout-step-1">
             <h3 className="text-center">Buy Now</h3>
@@ -161,7 +154,10 @@ const BuyNow = () => {
             >
               {() => (
                 <Form>
-                  <ShippingForm onChangeCity={onChangeCity} />
+                  <ShippingForm
+                    onChangeCity={onChangeCity}
+                    showSimpleMobile={true}
+                  />
                   <h3 className="text-center">Payment</h3>
                   <br />
                   <span className="d-block padding-s">Payment Option</span>

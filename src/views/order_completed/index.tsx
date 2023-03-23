@@ -8,8 +8,6 @@ const OrderCompleted = () => {
   const { orderNumber } = useParams();
   const { order, isLoading, error } = useOrder(orderNumber);
 
-  console.log(order);
-
   useDocumentTitle("Your Order | Sabiyya Collections");
 
   return (
@@ -36,7 +34,7 @@ const OrderCompleted = () => {
             <h3>Delivery Details</h3>
             <p>Full name: {order.guestUserInfo.fullname}</p>
             <p>Address: {order.guestUserInfo.address}</p>
-            <p>Phone: {order.guestUserInfo.mobile.value}</p>
+            <p>Phone: {order.guestUserInfo.mobile}</p>
             <p>Email: {order.guestUserInfo.email}</p>
             <p>Delivery Fee: {displayMoney(order.shippingCost)}</p>
             <p>Order Total: {displayMoney(order.total)}</p>

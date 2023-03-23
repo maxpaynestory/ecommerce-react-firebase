@@ -4,7 +4,10 @@ import { Field, useFormikContext } from "formik";
 import React, { useCallback, useEffect, useState } from "react";
 import Select from "react-select";
 
-const ShippingForm = ({ onChangeCity = () => {} }) => {
+const ShippingForm = ({
+  onChangeCity = () => {},
+  showSimpleMobile = false,
+}) => {
   const { values } = useFormikContext();
   const pakistanCities = [
     "Islamabad",
@@ -248,7 +251,17 @@ const ShippingForm = ({ onChangeCity = () => {} }) => {
     <div className="checkout-shipping-wrapper">
       <div className="checkout-shipping-form">
         <div className="d-block checkout-field">
-          <CustomMobileInput name="mobile" defaultValue={values.mobile} />
+          {showSimpleMobile ? (
+            <Field
+              name="mobile"
+              type="text"
+              label="* Enter your mobile"
+              placeholder="Enter your mobile"
+              component={CustomInput}
+            />
+          ) : (
+            <CustomMobileInput name="mobile" defaultValue={values.mobile} />
+          )}
         </div>
         <div className="d-block checkout-field">
           <Field
