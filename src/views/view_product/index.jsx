@@ -57,6 +57,11 @@ const ViewProduct = () => {
 
   useDocumentTitle(`View ${product?.name || "Item"}`);
 
+  const productSizes =
+    product?.sizes
+      .sort((a, b) => (a < b ? -1 : 1))
+      .map((size) => ({ label: `${size} meter`, value: size })) || [];
+
   return (
     <main className="content">
       {isLoading && (
@@ -124,10 +129,10 @@ const ViewProduct = () => {
                 <Select
                   placeholder="--Select Size--"
                   onChange={onSelectedSizeChange}
-                  options={product.sizes
-                    .sort((a, b) => (a < b ? -1 : 1))
-                    .map((size) => ({ label: `${size} meter`, value: size }))}
-                  styles={{ menu: (provided) => ({ ...provided, zIndex: 10 }) }}
+                  options={productSizes}
+                  defaultValue={
+                    productSizes.length > 0 ? productSizes[0] : null
+                  }
                 />
               </div>
               <br />
@@ -154,6 +159,7 @@ const ViewProduct = () => {
                 <button
                   className="button button-small"
                   onClick={() => history.push(`/buynow/${product.id}`)}
+                  disabled={product.maxQuantity < 1 ? true : false}
                 >
                   Buy Now
                 </button>

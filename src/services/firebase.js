@@ -263,11 +263,16 @@ class Firebase {
 
   removeProduct = (id) => this.db.collection("products").doc(id).delete();
 
-  buynowProduct = (product, guestUserInfo, orderNumber, total, shippingCost) => {
-    return new Promise( async (resolve, reject) => {
-      console.log("Going to create order", product, guestUserInfo, orderNumber);
+  buynowProduct = (
+    product,
+    guestUserInfo,
+    orderNumber,
+    total,
+    shippingCost
+  ) => {
+    return new Promise(async (resolve, reject) => {
       const orderId = this.db.collection("orders").doc().id;
-      const results = await this.db.collection('orders').doc(orderId).set({
+      const results = await this.db.collection("orders").doc(orderId).set({
         product: product,
         guestUserInfo: guestUserInfo,
         orderNumber: orderNumber,
@@ -275,11 +280,23 @@ class Firebase {
         total: total,
         shippingCost: shippingCost,
       });
+      const rs = await this.db
+        .collection("products")
+        .doc(product.id)
+        .update({
+          maxQuantity: app.firestore.FieldValue.increment(-1),
+        });
+      console.log("Ye kia hai", rs);
       resolve(results);
     });
   };
 
-  getOrder = (orderNumber) => this.db.collection("orders").where('orderNumber', '==', orderNumber).limit(1).get();
+  getOrder = (orderNumber) =>
+    this.db
+      .collection("orders")
+      .where("orderNumber", "==", orderNumber)
+      .limit(1)
+      .get();
 }
 
 const firebaseInstance = new Firebase();

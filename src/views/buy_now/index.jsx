@@ -169,7 +169,11 @@ const BuyNow = () => {
                     }}
                     className="text-right"
                   >
-                    <button className="button button-icon" type="submit">
+                    <button
+                      className="button button-icon"
+                      type="submit"
+                      disabled={product.maxQuantity < 1 ? true : false}
+                    >
                       Buy Now
                     </button>
                   </div>
