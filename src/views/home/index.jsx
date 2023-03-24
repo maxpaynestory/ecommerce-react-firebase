@@ -13,10 +13,10 @@ import {
   useScrollTop,
 } from "@/hooks";
 import bannerImg from "@/images/banner-girl.png";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 
-const Home = () => {
+const Home = (props) => {
   useDocumentTitle("Sabiyya Collections | Home");
   useScrollTop();
 
@@ -32,6 +32,16 @@ const Home = () => {
     isLoading: isLoadingRecommended,
     error: errorRecommended,
   } = useRecommendedProducts(6);
+
+  const history = useHistory();
+  const queryParams = new URLSearchParams(props.location.search);
+  const productRedirect = queryParams.get("product");
+
+  useEffect(() => {
+    if (productRedirect && productRedirect.length > 1) {
+      history.push(`/product/${productRedirect}`);
+    }
+  }, [productRedirect, history]);
 
   return (
     <main className="content">
