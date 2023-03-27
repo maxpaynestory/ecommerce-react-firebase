@@ -49,20 +49,16 @@ const Home = (props) => {
         <div className="banner">
           <div className="banner-desc">
             <h1 className="text-thin">
-              <strong>See</strong>
-              &nbsp;everything with&nbsp;
-              <strong>Clarity</strong>
+              <strong>LAWN SUMMER COLLECTION</strong>
+              &nbsp;every piece has <strong>FULL</strong> length
             </h1>
-            <p>
-              Buying eyewear should leave you happy and good-looking, with money
-              in your pocket. Glasses, sunglasses, and contacts—we’ve got your
-              eyes covered.
-            </p>
-            <br />
-            <Link to={SHOP} className="button">
-              Shop Now &nbsp;
-              <ArrowRightOutlined />
-            </Link>
+            <h3 className="text-thin">
+              <b>Shirt:</b> 3 meter
+              <br />
+              <strong>Dupatta:</strong> 2.5 meter
+              <br />
+              <strong>Trouser:</strong> 2.5 meter
+            </h3>
           </div>
           <div className="banner-img">
             <img src={bannerImg} alt="" />
