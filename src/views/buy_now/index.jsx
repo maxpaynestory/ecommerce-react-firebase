@@ -11,6 +11,7 @@ import { CHECKOUT_STEP_3 } from "@/constants/routes";
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import CashOnDelivery from "@/views/checkout/step3/CashOnDelivery";
+import moment from "moment";
 
 const BuyNow = () => {
   const { id } = useParams();
@@ -64,7 +65,14 @@ const BuyNow = () => {
 
   const onSubmitForm = useCallback(
     (form) => {
-      const orderNumber = window.performance.now().toString().replace(".", "");
+      let numberPart = window.performance.now().toString().replace(".", "");
+      numberPart = numberPart.substring(
+        numberPart.length - 5,
+        numberPart.length
+      );
+      const orderNumber = `${moment(new Date()).format(
+        "YYYY-MM-DD"
+      )}-${numberPart}`;
       dispatch(
         buyNowProduct(
           product,
