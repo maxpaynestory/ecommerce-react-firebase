@@ -55,7 +55,7 @@ const ViewProduct = () => {
     });
   };
 
-  useDocumentTitle(`View ${product?.name || "Item"}`);
+  useDocumentTitle(`${product?.name} | Sabiyya Collections`);
 
   const productSizes =
     product?.sizes
