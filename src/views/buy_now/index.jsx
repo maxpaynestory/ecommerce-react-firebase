@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import CashOnDelivery from "@/views/checkout/step3/CashOnDelivery";
 import moment from "moment";
+import { displayActionMessage } from "../../helpers/utils";
 
 const BuyNow = () => {
   const { id } = useParams();
@@ -33,10 +34,13 @@ const BuyNow = () => {
 
   const onChangeCity = (s) => {
     if (s.value === "Lahore") {
+      /// lahore to lahore
       setShippingCost(200);
     } else {
-      setShippingCost(250);
+      //// lahore to any city of Pakistan
+      setShippingCost(300);
     }
+    displayActionMessage("Delivery fee changed");
   };
 
   let total = 0;
