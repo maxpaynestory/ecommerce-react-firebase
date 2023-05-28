@@ -4,7 +4,7 @@ import * as ROUTE from "@/constants/routes";
 import logo from "@/images/logo-full.png";
 import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, matchPath } from "react-router-dom";
 import UserAvatar from "@/views/account/components/UserAvatar";
 import BasketToggle from "../basket/BasketToggle";
 import Badge from "./Badge";
@@ -53,6 +53,8 @@ const Navigation = () => {
   ];
 
   if (store.user && store.user.role === "ADMIN") {
+    return <></>;
+  } else if (matchPath(pathname, ROUTE.BUY_NOW)) {
     return <></>;
   } else if (window.screen.width <= 800) {
     return (

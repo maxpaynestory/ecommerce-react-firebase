@@ -119,8 +119,6 @@ const BuyNow = () => {
       {!isLoading && (
         <div className="checkout">
           <div className="checkout-step-1">
-            <h3 className="text-center">Buy Now</h3>
-            <br />
             <div className="basket-item">
               <div className="basket-item-wrapper">
                 <div className="basket-item-img-wrapper">
