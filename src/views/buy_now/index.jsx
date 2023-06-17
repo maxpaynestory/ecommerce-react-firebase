@@ -4,7 +4,8 @@ import { ArrowRightOutlined, LoadingOutlined } from "@ant-design/icons";
 import { ImageLoader } from "@/components/common";
 import { displayMoney } from "@/helpers/utils";
 import ShippingForm from "../checkout/step2/ShippingForm";
-import { Form, Formik } from "formik";
+import { Formik, Field } from "formik";
+import { CustomInput } from "@/components/formik";
 import * as Yup from "yup";
 import { buyNowProduct } from "@/redux/actions/productActions";
 import { CHECKOUT_STEP_3 } from "@/constants/routes";
@@ -13,15 +14,20 @@ import { useHistory, useParams } from "react-router-dom";
 import CashOnDelivery from "@/views/checkout/step3/CashOnDelivery";
 import moment from "moment";
 import { displayActionMessage } from "../../helpers/utils";
+import firebaseInstance from "../../services/firebase";
 
 const BuyNow = () => {
   const { id } = useParams();
   const { product, isLoading, error } = useProduct(id);
   const [shippingCost, setShippingCost] = useState(200);
+  const [showShoppingForm, setShowShoppingForm] = useState(true);
+  const [showOTPForm, setShowOTPForm] = useState(false);
+  const [filledForm, setFilledForm] = useState({});
+  const [confirmationResult, setConfirmationResult] = useState(null);
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const initFormikValues = {
+  const initShippingValues = {
     fullname: "",
     email: "",
     address: "",
@@ -48,7 +54,7 @@ const BuyNow = () => {
     total = product.price * product.quantity + shippingCost;
   }
 
-  const FormSchema = Yup.object().shape({
+  const shippingFormValidation = Yup.object().shape({
     fullname: Yup.string()
       .required("Full name is required.")
       .min(2, "Full name must be at least 2 characters long.")
@@ -57,14 +63,22 @@ const BuyNow = () => {
       .email("Email is not valid.")
       .required("Email is required."),
     address: Yup.string().required("Your Full address is required."),
-    mobile: Yup.string().required(
-      "Mobile number is required. example 031001234567"
-    ),
+    mobile: Yup.string()
+      .required("Mobile number is required. example 031001234567")
+      .length(11, "Mobile number is required. example 031001234567")
+      .matches(/^(\d)+$/, "Mobile number is required. example 031001234567"),
     isInternational: Yup.boolean(),
     isDone: Yup.boolean(),
     city: Yup.object().shape({
       value: Yup.string().required("City is required"),
     }),
+  });
+
+  const otpFormValidation = Yup.object().shape({
+    otp: Yup.string()
+      .required()
+      .length(6)
+      .matches(/^(\d)+$/),
   });
 
   const onSubmitForm = useCallback(
@@ -109,6 +123,45 @@ const BuyNow = () => {
     ]
   );
 
+  const onShippingFormSubmit = useCallback((form) => {
+    setFilledForm(form);
+    onCaptchVerify();
+    const intlPhoneNumber = "+92" + form.mobile.slice(1);
+    firebaseInstance
+      .signInWithPhoneNumber(intlPhoneNumber, window.recaptchaVerifier)
+      .then((res) => {
+        setConfirmationResult(res);
+        setShowShoppingForm(false);
+        setShowOTPForm(true);
+      })
+      .catch((error) => {
+        console.log("Error firebaseInstance.signInWithPhoneNumber ", error);
+      });
+  });
+
+  const onOTPFormSubmit = useCallback(
+    (form) => {
+      confirmationResult
+        .confirm(form.otp)
+        .then(async (res) => {
+          onSubmitForm(filledForm);
+        })
+        .catch((err) => {
+          console.log("confirmationResult err", err);
+        });
+    },
+    [confirmationResult, filledForm]
+  );
+
+  const onCaptchVerify = useCallback(() => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier =
+        new firebaseInstance.app.auth.RecaptchaVerifier("recaptcha-container", {
+          size: "invisible",
+        });
+    }
+  }, [filledForm, firebaseInstance]);
+
   useDocumentTitle("Buy Now | Sabiyya Collections");
 
   return (
@@ -120,7 +173,7 @@ const BuyNow = () => {
           <LoadingOutlined style={{ fontSize: "3rem" }} />
         </div>
       )}
-      {!isLoading && (
+      {!isLoading && showShoppingForm && (
         <div className="checkout">
           <div className="checkout-step-1">
             <div className="basket-item">
@@ -158,12 +211,12 @@ const BuyNow = () => {
             <br />
             <Formik
               validateOnChange
-              initialValues={initFormikValues}
-              validationSchema={FormSchema}
-              onSubmit={onSubmitForm}
+              initialValues={initShippingValues}
+              validationSchema={shippingFormValidation}
+              onSubmit={onShippingFormSubmit}
             >
-              {() => (
-                <Form>
+              {({ handleSubmit }) => (
+                <form onSubmit={handleSubmit}>
                   <ShippingForm
                     onChangeCity={onChangeCity}
                     showSimpleMobile={true}
@@ -187,7 +240,55 @@ const BuyNow = () => {
                       Buy Now
                     </button>
                   </div>
-                </Form>
+                </form>
+              )}
+            </Formik>
+          </div>
+        </div>
+      )}
+      {showOTPForm && (
+        <div className="checkout">
+          <div className="checkout-step-1">
+            <h3 className="text-center">Verify OTP</h3>
+            <br />
+            <p>
+              We have sent you a OTP on {filledForm.mobile}. Please check your
+              SMS
+            </p>
+            <Formik
+              validateOnChange
+              initialValues={{
+                otp: "",
+              }}
+              validationSchema={otpFormValidation}
+              onSubmit={onOTPFormSubmit}
+            >
+              {({ handleSubmit }) => (
+                <form onSubmit={handleSubmit}>
+                  <div className="checkout-shipping-wrapper">
+                    <div className="checkout-shipping-form">
+                      <div className="d-block checkout-field">
+                        <Field
+                          name="otp"
+                          label="* OTP"
+                          placeholder="Enter OTP from SMS"
+                          component={CustomInput}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      flex: 1,
+                      marginTop: 10,
+                    }}
+                    className="text-right"
+                  >
+                    <button className="button button-icon" type="submit">
+                      Submit
+                    </button>
+                  </div>
+                </form>
               )}
             </Formik>
           </div>

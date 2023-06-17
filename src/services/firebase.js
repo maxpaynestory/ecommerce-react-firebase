@@ -11,6 +11,7 @@ class Firebase {
     this.storage = app.storage();
     this.db = app.firestore();
     this.auth = app.auth();
+    this.app = app;
   }
 
   // AUTH ACTIONS ------------
@@ -29,6 +30,9 @@ class Firebase {
 
   signInWithGithub = () =>
     this.auth.signInWithPopup(new app.auth.GithubAuthProvider());
+
+  signInWithPhoneNumber = (phone, appVerifier) =>
+    this.auth.signInWithPhoneNumber(phone, appVerifier);
 
   signOut = () => this.auth.signOut();
 
