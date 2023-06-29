@@ -2,6 +2,7 @@ import app from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
+import "firebase/analytics";
 import firebaseConfig from "./config";
 
 class Firebase {
@@ -11,6 +12,9 @@ class Firebase {
     this.storage = app.storage();
     this.db = app.firestore();
     this.auth = app.auth();
+    this.analytics = app.analytics();
+    const uniqueUserId = window.performance.now().toString();
+    this.analytics.setUserId(uniqueUserId);
     this.app = app;
   }
 
@@ -18,6 +22,8 @@ class Firebase {
 
   createAccount = (email, password) =>
     this.auth.createUserWithEmailAndPassword(email, password);
+
+  logEvent = (name, data) => this.analytics.logEvent(name, data);
 
   signIn = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password);

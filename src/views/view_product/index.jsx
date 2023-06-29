@@ -13,8 +13,9 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import Select from "react-select";
+import firebaseInstance from "../../services/firebase";
 
-const ViewProduct = () => {
+const ViewProduct = (props) => {
   const { id } = useParams();
   const { product, isLoading, error } = useProduct(id);
   const { addToBasket, isItemOnBasket } = useBasket(id);
@@ -23,6 +24,8 @@ const ViewProduct = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const history = useHistory();
+  const queryParams = new URLSearchParams(props.location.search);
+  const fbclid = queryParams.get("fbclid");
 
   const {
     recommendedProducts,
@@ -35,6 +38,12 @@ const ViewProduct = () => {
   useEffect(() => {
     setSelectedImage(product?.image);
   }, [product]);
+
+  useEffect(() => {
+    if (fbclid && fbclid.length > 1) {
+      firebaseInstance.logEvent("facebookAd", fbclid);
+    }
+  }, [fbclid]);
 
   const onSelectedSizeChange = (newValue) => {
     setSelectedSize(newValue.value);

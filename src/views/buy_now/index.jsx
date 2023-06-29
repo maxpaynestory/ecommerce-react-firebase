@@ -109,6 +109,7 @@ const BuyNow = () => {
           shippingCost
         )
       );
+      firebaseInstance.logEvent("ordercompleted", orderNumber);
       history.push("/order/" + orderNumber);
     },
     [

@@ -8,10 +8,15 @@ import * as view from "@/views";
 import AdminRoute from "./AdminRoute";
 import ClientRoute from "./ClientRoute";
 import PublicRoute from "./PublicRoute";
+import firebaseInstance from "../services/firebase";
 
 // Revert back to history v4.10.0 because
 // v5.0 breaks navigation
 export const history = createBrowserHistory();
+
+history.listen((location) => {
+  firebaseInstance.logEvent("pageview", location.pathname);
+});
 
 const AppRouter = () => (
   <Router history={history}>

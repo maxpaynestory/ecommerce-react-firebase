@@ -15,6 +15,7 @@ import {
 import bannerImg from "@/images/banner-girl.png";
 import React, { useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
+import firebaseInstance from "../../services/firebase";
 
 const Home = (props) => {
   useDocumentTitle("Sabiyya Collections | Home");
@@ -36,12 +37,19 @@ const Home = (props) => {
   const history = useHistory();
   const queryParams = new URLSearchParams(props.location.search);
   const productRedirect = queryParams.get("product");
+  const fbclid = queryParams.get("fbclid");
 
   useEffect(() => {
     if (productRedirect && productRedirect.length > 1) {
       history.push(`/product/${productRedirect}`);
     }
   }, [productRedirect, history]);
+
+  useEffect(() => {
+    if (fbclid && fbclid.length > 1) {
+      firebaseInstance.logEvent("facebookAd", fbclid);
+    }
+  }, [fbclid]);
 
   return (
     <main className="content">
