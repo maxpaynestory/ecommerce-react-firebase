@@ -24,21 +24,11 @@ const Footer = () => {
 
   return !showFooter ? null : (
     <footer className="footer">
-      <div className="footer-col-1">
-        <strong>
-          <span>
-            Developed by <a href="https://github.com/jgudo">JULIUS GUEVARRA</a>
-          </span>
-        </strong>
-      </div>
-      <div className="footer-col-2">
+      <div>
         <img alt="Footer logo" className="footer-logo" src={logo} />
-        <h5>
-          &copy;&nbsp;
-          {new Date().getFullYear()}
-        </h5>
+        <h5>{new Date().getFullYear()}</h5>
       </div>
-      <div className="footer-col-2">
+      <div>
         <a
           href="https://api.whatsapp.com/send?phone=923040916691"
           title="Whatsapp"
@@ -79,14 +69,6 @@ const Footer = () => {
           </svg>
         </a>
         <h5>Whatsapp</h5>
-      </div>
-      <div className="footer-col-3">
-        <strong>
-          <span>
-            Fork this project &nbsp;
-            <a href="https://github.com/jgudo/ecommerce-react">HERE</a>
-          </span>
-        </strong>
       </div>
     </footer>
   );

@@ -2,7 +2,7 @@
 import { FilterOutlined, ShoppingOutlined } from "@ant-design/icons";
 import * as ROUTE from "@/constants/routes";
 import logo from "@/images/logo-full.png";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, NavLink, useLocation, matchPath } from "react-router-dom";
 import UserAvatar from "@/views/account/components/UserAvatar";
@@ -15,6 +15,7 @@ import SearchBar from "./SearchBar";
 const Navigation = () => {
   const navbar = useRef(null);
   const { pathname } = useLocation();
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   const store = useSelector((state) => ({
     basketLength: state.basket.length,
@@ -24,7 +25,7 @@ const Navigation = () => {
   }));
 
   const scrollHandler = () => {
-    if (navbar.current && window.screen.width > 480) {
+    if (navbar.current && screenWidth > 480) {
       if (window.pageYOffset >= 70) {
         navbar.current.classList.add("is-nav-scrolled");
       } else {
@@ -33,9 +34,17 @@ const Navigation = () => {
     }
   };
 
+  const resizeHandler = useCallback(() => {
+    setScreenWidth(window.innerWidth);
+  });
+
   useEffect(() => {
     window.addEventListener("scroll", scrollHandler);
-    return () => window.removeEventListener("scroll", scrollHandler);
+    window.addEventListener("resize", resizeHandler);
+    return () => {
+      window.removeEventListener("scroll", scrollHandler);
+      window.removeEventListener("resize", resizeHandler);
+    };
   }, []);
 
   const onClickLink = (e) => {
@@ -56,7 +65,7 @@ const Navigation = () => {
     return <></>;
   } else if (matchPath(pathname, ROUTE.BUY_NOW)) {
     return <></>;
-  } else if (window.screen.width <= 800) {
+  } else if (screenWidth <= 800) {
     return (
       <MobileNavigation
         // eslint-disable-next-line react/jsx-props-no-spreading
