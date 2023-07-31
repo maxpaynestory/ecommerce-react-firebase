@@ -15,6 +15,7 @@ import CashOnDelivery from "@/views/checkout/step3/CashOnDelivery";
 import moment from "moment";
 import { displayActionMessage } from "../../helpers/utils";
 import firebaseInstance from "../../services/firebase";
+import ReactPixel from "react-facebook-pixel";
 
 const BuyNow = () => {
   const { id } = useParams();
@@ -109,6 +110,7 @@ const BuyNow = () => {
           shippingCost
         )
       );
+      ReactPixel.track("Purchase", { currency: "PKR", value: total });
       firebaseInstance.logEvent("ordercompleted", orderNumber);
       history.push("/order/" + orderNumber);
     },
