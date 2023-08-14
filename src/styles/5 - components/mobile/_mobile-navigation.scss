@@ -9,6 +9,25 @@
   box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
 }
 
+.mobile-navigation-2{
+  width: 100%;
+  position: fixed;
+  z-index: map-get($z-index, 'navigation');
+  top: 0;
+  left: 0;
+  display: flex;
+  background-color: $nav-bg;
+  padding: 1rem 0.5rem 1rem 2rem;
+  justify-content: space-between;
+  button {
+    background-color: $nav-bg;
+    border: none;
+  }
+  a {
+    margin-top: 1rem;
+  }
+}
+
 .mobile-navigation-main {
   width: 100%;
   height: 50px;

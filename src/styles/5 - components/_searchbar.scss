@@ -1,7 +1,14 @@
 .searchbar {
-  width: 400px;
+  padding-left: 1rem;
   display: flex;
-  position: relative;
+  background-color: white;
+  input {
+    min-width: 250px;
+    border: none;
+    &:focus{
+      border: none;
+    }
+  }
 }
 
 .search-input {

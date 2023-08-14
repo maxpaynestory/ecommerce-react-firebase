@@ -189,12 +189,8 @@
 
 // PRODUCT MODAL -------------------------------------------------
 .product-view {
-  margin: 0 5rem;
-
   @include tablet {
     width: 100%;
-    margin: 0;
-    margin-top: 5rem;
   }
 }
 

@@ -1,15 +1,18 @@
 /* eslint-disable react/no-array-index-key */
-import { SearchOutlined } from '@ant-design/icons';
-import React, { useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { clearRecentSearch, removeSelectedRecent } from '@/redux/actions/filterActions';
+import { SearchOutlined } from "@ant-design/icons";
+import React, { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import {
+  clearRecentSearch,
+  removeSelectedRecent,
+} from "@/redux/actions/filterActions";
 
 const SearchBar = () => {
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
   const { filter, isLoading } = useSelector((state) => ({
     filter: state.filter,
-    isLoading: state.app.loading
+    isLoading: state.app.loading,
   }));
   const searchbarRef = useRef(null);
   const history = useHistory();
@@ -26,10 +29,10 @@ const SearchBar = () => {
     if (e.keyCode === 13) {
       // dispatch(setTextFilter(searchInput));
       e.target.blur();
-      searchbarRef.current.classList.remove('is-open-recent-search');
+      searchbarRef.current.classList.remove("is-open-recent-search");
 
       if (isMobile) {
-        history.push('/');
+        history.push("/");
       }
 
       history.push(`/search/${searchInput.trim().toLowerCase()}`);
@@ -37,11 +40,11 @@ const SearchBar = () => {
   };
 
   const recentSearchClickHandler = (e) => {
-    const searchBar = e.target.closest('.searchbar');
+    const searchBar = e.target.closest(".searchbar");
 
     if (!searchBar) {
-      searchbarRef.current.classList.remove('is-open-recent-search');
-      document.removeEventListener('click', recentSearchClickHandler);
+      searchbarRef.current.classList.remove("is-open-recent-search");
+      document.removeEventListener("click", recentSearchClickHandler);
     }
   };
 
@@ -49,14 +52,14 @@ const SearchBar = () => {
     e.target.select();
 
     if (filter.recent.length !== 0) {
-      searchbarRef.current.classList.add('is-open-recent-search');
-      document.addEventListener('click', recentSearchClickHandler);
+      searchbarRef.current.classList.add("is-open-recent-search");
+      document.addEventListener("click", recentSearchClickHandler);
     }
   };
 
   const onClickRecentSearch = (keyword) => {
     // dispatch(setTextFilter(keyword));
-    searchbarRef.current.classList.remove('is-open-recent-search');
+    searchbarRef.current.classList.remove("is-open-recent-search");
     history.push(`/search/${keyword.trim().toLowerCase()}`);
   };
 
@@ -67,9 +70,8 @@ const SearchBar = () => {
   return (
     <>
       <div className="searchbar" ref={searchbarRef}>
-        <SearchOutlined className="searchbar-icon" />
+        <SearchOutlined />
         <input
-          className="search-input searchbar-input"
           onChange={onSearchChange}
           onKeyUp={onKeyUp}
           onFocus={onFocusInput}
