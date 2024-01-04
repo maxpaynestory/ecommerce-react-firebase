@@ -64,7 +64,7 @@ const ViewProduct = (props) => {
     });
   };
 
-  useDocumentTitle(`${product?.name} | Sabiyya Collections`);
+  useDocumentTitle(`Sabiyya Collections - ${product?.name}`);
 
   const productSizes =
     product?.sizes
