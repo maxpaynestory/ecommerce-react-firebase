@@ -1,4 +1,6 @@
-# Salinaka | E-commerce react app
+**In the name of ALLAH, who has guided me to do this work**
+
+# Sabiyya Collections | E-commerce react app
 
 Simple ecommerce react js app with firebase [typescript].
 
